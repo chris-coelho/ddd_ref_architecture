@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\_Common\_Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DAO\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+</Project>
