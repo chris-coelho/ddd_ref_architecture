@@ -1,4 +1,4 @@
-namespace Common.Application;
+namespace Common.Application.NotificationPattern;
 
 public class Notification
 {
@@ -8,6 +8,7 @@ public class Notification
     public Notification(string message)
     {
         Message = message;
+        Exception = new Exception();
     }
 
     public Notification(string message, Exception exception)

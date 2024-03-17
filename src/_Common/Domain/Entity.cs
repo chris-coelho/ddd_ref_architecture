@@ -2,6 +2,7 @@ using Common.Messaging;
 
 namespace Common.Domain;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 public abstract class Entity: DomainValidationBase
 {
     private Guid _id;
@@ -25,7 +26,7 @@ public abstract class Entity: DomainValidationBase
         _domainEvents.Clear();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         var other = obj as Entity;
 

@@ -9,6 +9,11 @@ public abstract class DomainValidationBase
     public virtual bool Invalid => !Valid;
     public virtual ValidationResult ValidationResult { get; private set; }
 
+    protected DomainValidationBase()
+    {
+        ValidationResult = new ValidationResult();
+    }
+
     protected InvariantResult CheckInvariants<T>(T domainObject, AbstractValidator<T> validator)
     {
         if (domainObject is Aggregate) 
@@ -28,13 +33,10 @@ public abstract class DomainValidationBase
     {
         if (domainModelObjectResults == null) 
             throw new ArgumentNullException(nameof(domainModelObjectResults));
-            
-        if (ValidationResult == null) 
-            ValidationResult = new ValidationResult();
 
         foreach (var result in domainModelObjectResults)
         {
-            for (int i = 0; i < result?.Errors.Count; i++)
+            for (var i = 0; i < result.Errors.Count; i++)
             {
                 ValidationResult.Errors.Add(result.Errors[i]);
             }
@@ -42,13 +44,15 @@ public abstract class DomainValidationBase
 
         var rootValidationResult = validator.Validate(aggregate); 
 
-        for (int i = 0; i < rootValidationResult.Errors.Count; i++)
+        for (var i = 0; i < rootValidationResult.Errors.Count; i++)
         {
             ValidationResult.Errors.Add(rootValidationResult.Errors[i]);
         }
 
         Valid = ValidationResult.IsValid;
             
-        return (Valid ? InvariantResult.Successful: InvariantResult.Failed);
+        return Valid 
+            ? InvariantResult.Successful
+            : InvariantResult.Failed;
     }
 }

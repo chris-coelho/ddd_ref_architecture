@@ -6,8 +6,9 @@ namespace Infra.DataAccess.Repositories;
 
 public abstract class RepositoryBase<TAggregate> where TAggregate : Aggregate
 {
-        private const string INVARIANT_VIOLATION_MESSAGE =
-        "The aggregate state is invalid. Check the domain invariants on the application services before to change an aggregate.";
+    // ReSharper disable once InconsistentNaming
+    private const string INVARIANT_VIOLATION_MESSAGE =
+        "The {name} aggregate state is invalid. Check the domain invariants on the application services before to change an aggregate.";
 
     private readonly ISession _session;
     protected ISession Session => _session;
@@ -28,7 +29,8 @@ public abstract class RepositoryBase<TAggregate> where TAggregate : Aggregate
     public async Task SaveOrUpdateAsync(TAggregate aggregate,
         CancellationToken cancellationToken = default)
     {
-        if (aggregate.Invalid) throw new InvariantViolationException(INVARIANT_VIOLATION_MESSAGE);
+        
+        if (aggregate.Invalid) throw new InvariantViolationException(INVARIANT_VIOLATION_MESSAGE.Replace("{name}", aggregate.GetType().Name));
 
         var currentTransaction = _session.GetCurrentTransaction();
         if (currentTransaction is { IsActive: true })
@@ -50,7 +52,7 @@ public abstract class RepositoryBase<TAggregate> where TAggregate : Aggregate
         var processedAggregates = 0;
         foreach (var aggregate in aggregates)
         {
-            if (aggregate.Invalid) throw new InvariantViolationException(INVARIANT_VIOLATION_MESSAGE);
+            if (aggregate.Invalid) throw new InvariantViolationException(INVARIANT_VIOLATION_MESSAGE.Replace("{name}", aggregate.GetType().Name));
             
             await SaveOrUpdateAsync(aggregate, cancellationToken);
             processedAggregates++;

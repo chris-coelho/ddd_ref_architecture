@@ -22,15 +22,8 @@ public class CreateAccountController : ControllerBase
     [ProducesResponseType(typeof(CreateAccountResponseDto), (int) HttpStatusCode.OK)]
     public async Task<IActionResult> CreateAccount([FromBody] CreateAccountRequestDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = await _service.ProcessAsync(request.MapToCreateAccountCommand(), cancellationToken);
-            return Ok(result.MapToCreateAccountResponse());
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        var result = await _service.ProcessAsync(request.MapToCreateAccountCommand(), cancellationToken);
+        return Ok(result.MapToCreateAccountResponse());
     }
 
 }

@@ -1,4 +1,5 @@
 using Application.DI;
+using Common.Application.API;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -7,6 +8,11 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMvcCore(options =>
+{
+    options.Filters.Add<NotificationAsyncResultFilter>();
+});
+
 // Custom DI services
 builder.Services
     .AddDbConfiguration(configuration)
@@ -22,10 +28,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

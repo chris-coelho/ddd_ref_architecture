@@ -4,7 +4,7 @@ public abstract class ValueObject<T> : DomainValidationBase where T : ValueObjec
 {
     protected abstract IEnumerable<object> AttributesToEqualityCheck();
         
-    public override bool Equals(object other)
+    public override bool Equals(object? other)
     {
         var valueObject = other as T;
 
@@ -16,11 +16,6 @@ public abstract class ValueObject<T> : DomainValidationBase where T : ValueObjec
 
     public bool Equals(T other)
     {
-        if (other == null)
-        {
-            return false;
-        }
-
         return AttributesToEqualityCheck()
             .SequenceEqual(other.AttributesToEqualityCheck());
     }
@@ -30,7 +25,7 @@ public abstract class ValueObject<T> : DomainValidationBase where T : ValueObjec
         int hash = 17;
         foreach (var obj in AttributesToEqualityCheck())
         {
-            hash = hash * 31 + (obj == null ? 0 : obj.GetHashCode());
+            hash = hash * 31 + obj.GetHashCode();
         }
 
         return hash;

@@ -16,6 +16,9 @@ public static class CreateAccountMapper
     
     public static CreateAccountResponseDto MapToCreateAccountResponse(this CreateAccountCommandResultDto result)
     {
+        if (result is null)
+            return new CreateAccountResponseDto();
+        
         return new CreateAccountResponseDto
         {
             accountId = result.AccountId.ToString(),

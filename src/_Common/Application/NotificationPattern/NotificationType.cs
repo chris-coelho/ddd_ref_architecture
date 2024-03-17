@@ -1,4 +1,4 @@
-namespace Common.Application;
+namespace Common.Application.NotificationPattern;
 
 public enum NotificationType
 {
